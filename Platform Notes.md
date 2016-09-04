@@ -8,8 +8,8 @@ Overview
 * Basic display modes: 80x24 or 132x14 (132x24 for avo)
 * RAM: 3KB(3072 bytes) combined screen and scratch
 * ROM: 8KB(8192 bytes) for processor data and code
-** ROMs include a checksum which is checked at self-test
-** Checksum: every 2K, summed, mod 0xff == 0
+ * ROMs include a checksum which is checked at self-test
+ * Checksum: every 2K, summed, mod 0xff == 0
 * Character generation ROM(s): 2KB(2048 bytes) for characters
 * Non-volatile RAM for storing configuration, ER1400 (1400 bits)
 
@@ -18,15 +18,15 @@ Overview
 Clocks
 ------
 
-Main Crystal: 24.8832 MHz
-NVR/LBA7: 15.734 kHz (63.556 uS); estimate at 8 * LBA4
-LBA4 period : 7.945uS
-Even line: 
-Kbd transmission time : 1.27mS/B
-Vertical freq: ~60 Hz
-Dot clock: 24 MHz in 132-char mode; 16 MHz in 80-char mode
-PSUART: 2.76480 MHz (Div9)
-Processor: 2.76480 MHz (Div9)
+- Main Crystal: 24.8832 MHz
+- NVR/LBA7: 15.734 kHz (63.556 uS); estimate at 8 * LBA4
+- LBA4 period : 7.945uS
+- Even line: 
+- Kbd transmission time : 1.27mS/B
+- Vertical freq: ~60 Hz
+- Dot clock: 24 MHz in 132-char mode; 16 MHz in 80-char mode
+- PSUART: 2.76480 MHz (Div9)
+- Processor: 2.76480 MHz (Div9)
 
 Memory Map
 ----------
@@ -42,15 +42,15 @@ Memory Map
 0xa000  | 0xbfff  |   8K   | AVO - program memory expansion ROM
 0xc000  | 0xffff  |  16K   | Unassigned
 
-ROM is four 2kx8 mask programmed ROMs.
-Main RAM is six 1kx4 static RAM chips.
-AVO RAM is another six 1kx4 static RAM chips.
+- ROM is four 2kx8 mask programmed ROMs.
+- Main RAM is six 1kx4 static RAM chips.
+- AVO RAM is another six 1kx4 static RAM chips.
 
 Modifications
 -------------
 
-Cleared out from 0x66 to 0xb9 -- 83 bytes
-At end of roms -- 1fd7 to 2000 -- 41 bytes
+- Cleared out from 0x66 to 0xb9 -- 83 bytes
+- At end of roms -- 1fd7 to 2000 -- 41 bytes
 
 0x2004/0x2005 get saved and set to 70 03 when screensaver is on
 
@@ -67,15 +67,15 @@ RAM Map
 
  Start  |   End   |  Size  |  Description
 --------|---------|--------|-------------
-0x2000  | 0x2012  |  18B   | Blank lines for refresh (6 x 3B)
-0x2012  | 0x204e  |  60B   | Stack area (grows down from 0x204e)
-0x204f  | 0x22d0  | 641B   | Scratch Pad/Setup Area(?)
+ 0x2000  | 0x2012  |  18B   | Blank lines for refresh (6 x 3B)
+ 0x2012  | 0x204e  |  60B   | Stack area (grows down from 0x204e)
+ 0x204f  | 0x22d0  | 641B   | Scratch Pad/Setup Area(?)
  0x2052  | 0x2054  |   2B   | 0x2004 during init ?
  0x2068  | 0x2069  |   1B   | Keys flag buffer
  0x206a  | 0x206e  |   3B   | New keys pressed buffer
  0x20f6  | 0x20f8  |   2B   | 0x22d0 during init?
  0x2014  | 0x2015  |   1B   | 0xff during init?
-0x22d0  | 0x2c00  | 2352B  | Screen RAM
+ 0x22d0  | 0x2c00  | 2352B  | Screen RAM
 
 0x22bb through 0x22d0 appear to be unused!!!
 
@@ -108,14 +108,14 @@ Screen RAM organization
 Starts at 0x2000. Each line consists of a terminator (0x7f) followed by
 two bytes of address and attributes:
 
-7 | 6 5 | 4 | 3 2 1 0 | 7 6 5 4 3 2 1
---|-----|---|---------|--------------
-S | AA  | M | addr    | addr
+| 7 | 6 5 | 4 | 3 2 1 0 | 7 6 5 4 3 2 1
+|---|-----|---|---------|--------------
+| S | AA  | M | addr    | addr
 
-S == 1 if part of scrolling region
-AA == 11 if normal atrributes
-M == 1 if ram starting at 0x2000, M = 0 if ram starting at 0x4000 (?)
-addr == low bits of address
+- S == 1 if part of scrolling region
+- AA == 11 if normal atrributes
+- M == 1 if ram starting at 0x2000, M = 0 if ram starting at 0x4000 (?)
+- addr == low bits of address
 
 Relevant port addresses
 -----------------------
@@ -137,11 +137,11 @@ There is no even field mystery. It was the LBA 7 (also known as the NVR clock) a
 
 NVRAM interactions
 ------------------
-data is D0
-C1 is D1
-C2 is D2
-C3 is D3
-!SPDS is D5
+- data is D0
+- C1 is D1
+- C2 is D2
+- C3 is D3
+- !SPDS is D5
 
 Accept address high, accept address low, standby, read, standby, (accept data is standby?)
 22 23x9 22 23x9 0x2f 0x2d 0x2f 0x25 0x2f 0x30 0x23
@@ -182,7 +182,6 @@ Convenience Functions in ROM
 Label  |   Description
 -------|----------------------
 X13de  |  add A to HL
-
 X1083  |  set DE bytes starting at HL to B
 X02a4  |  init: zero all RAM above stack
 X038b  |  memmov: copy B bytes from DE to HL
@@ -200,12 +199,15 @@ LXI LIST
 --------
 
 All value loads that could be addresses:
+
+```asm
 X01c3: lxi h,X0815 ???
        lxi h, 020e ??? right after loads keymapping table
 X0431: lxi b,X0113 (then call 0f7e,0e47)
 X05af: lxi h,X05b8 (then jmp a18) // Likely table? (but subsequent code at 5b8 is valid)
 X0c64: lxi h,X05ad (then jmp a18) // ... less likely table, feels like a chain
 X0c7a: lxi h,X0c8a (feels like a table)
+```
 
 STP -- Standard Terminal Port
 -----------------------------
